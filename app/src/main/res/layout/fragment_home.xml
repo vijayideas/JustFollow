@@ -1,0 +1,58 @@
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical">
+
+    <LinearLayout
+        android:descendantFocusability="blocksDescendants"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:weightSum="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingLeft="@dimen/feed_item_padding_left_right"
+            android:paddingRight="@dimen/feed_item_padding_left_right" >
+
+            <com.vjy.justfollow.custom_view.CircularNetworkImageView
+                android:id="@+id/profilePic"
+                android:layout_width="@dimen/feed_item_profile_pic"
+                android:layout_height="@dimen/feed_item_profile_pic"
+                android:scaleType="fitCenter" >
+            </com.vjy.justfollow.custom_view.CircularNetworkImageView>
+
+            <TextView
+                android:layout_weight="1"
+                android:padding="8dp"
+                android:id="@+id/timestamp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/timestamp"
+                android:text="Whats on your mind?"
+                android:textSize="14sp" />
+
+            <ImageButton
+                android:paddingTop="8dp"
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_arrow_down"/>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+
+
+</android.support.v4.widget.NestedScrollView>

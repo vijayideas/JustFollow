@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">JUSTFOLLOW</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_profile">Profile</string>
+    <string name="edit_profile">View and edit your profile</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_test">Test</string>
+    <string name="title_nearby">Nearby</string>
+
+
+</resources>
