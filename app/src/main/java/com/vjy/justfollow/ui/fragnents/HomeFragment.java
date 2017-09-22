@@ -29,14 +29,23 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-public class HomeFragment extends Fragment {
+
+public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeedItemClickListener{
 
     private static final String TAG = HomeFragment.class.getSimpleName();
-    private RecyclerView listView;
+
+    @BindView(R.id.recycler)
+    RecyclerView listView;
+
+    @BindView(R.id.profilePic)
+    CircularNetworkImageView profilePic;
+
+
     private FeedRecyclerAdapter listAdapter;
     private List<FeedItem> feedItems;
-    private CircularNetworkImageView profilePic;
     private String URL_FEED = "https://api.androidhive.info/feed/feed.json";
     String p = "https://s3-us-west-1.amazonaws.com/com.localapp.profile.image/5908362ac44dc510a4cfe1bc1502333400497";
 
@@ -47,9 +56,8 @@ public class HomeFragment extends Fragment {
 
 
     public static HomeFragment newInstance() {
-        HomeFragment fragment = new HomeFragment();
 
-        return fragment;
+        return new HomeFragment();
     }
 
     @Override
@@ -62,19 +70,17 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-        initUi(view);
+        ButterKnife.bind(this, view);
+        initUi();
         // Inflate the layout for this fragment
         return view;
     }
 
 
-    void initUi(View view) {
+    void initUi() {
 
-        profilePic = view.findViewById(R.id.profilePic);
         profilePic.setImageUrl(p, AppController.getInstance().getImageLoader());
 
-        listView = (RecyclerView) view.findViewById(R.id.recycler);
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
         listView.setItemAnimator(new DefaultItemAnimator());
 
@@ -83,6 +89,7 @@ public class HomeFragment extends Fragment {
         feedItems = new ArrayList<FeedItem>();
 
         listAdapter = new FeedRecyclerAdapter(feedItems);
+        listAdapter.setOnFeedItemClickListener(this);
         listView.setAdapter(listAdapter);
 
 
@@ -168,5 +175,18 @@ public class HomeFragment extends Fragment {
     }
 
 
+    @Override
+    public void onCommentsClick(View v, int position) {
 
+    }
+
+    @Override
+    public void onMoreClick(View v, int position) {
+
+    }
+
+    @Override
+    public void onProfileClick(View v) {
+
+    }
 }

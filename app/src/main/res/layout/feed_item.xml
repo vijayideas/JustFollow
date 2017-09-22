@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/feed_bg"
@@ -8,11 +9,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_marginTop="@dimen/feed_item_margin"
         android:background="@color/white"
         android:orientation="vertical"
-        android:paddingBottom="16dp"
+        android:paddingBottom="4dp"
         android:paddingTop="@dimen/feed_item_padding_top_bottom" >
 
         <LinearLayout
@@ -70,6 +70,8 @@
             android:paddingRight="@dimen/feed_item_status_pad_left_right"
             android:textColorLink="@color/link" />
 
+
+
         <com.android.volley.toolbox.NetworkImageView
             android:id="@+id/feedImage1"
             android:layout_width="match_parent"
@@ -78,33 +80,53 @@
             android:scaleType="fitXY"
             android:visibility="visible" />
 
+
+
+
         <RelativeLayout
+            android:layout_marginTop="4dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="16dp"
+            android:layout_height="50dp"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/feed_item_padding_left_right"
             android:paddingRight="@dimen/feed_item_padding_left_right">
-
-            <ImageButton
+            
+            
+            <com.vjy.justfollow.likebutton.LikeButton
                 android:layout_alignParentStart="true"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@drawable/ic_like_black"/>
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_like"
+                app:icon_size="22dp"
+                app:anim_scale_factor="2.8"
+                app:icon_type="heart"/>
 
+            <!--<ImageButton
+                android:id="@+id/btn_like"
+                android:layout_alignParentStart="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/ic_like_black"/>
+-->
             <ImageButton
+                android:id="@+id/btn_comment"
                 android:layout_centerHorizontal="true"
-                android:layout_width="30dp"
-                android:layout_height="32dp"
-                android:background="@drawable/ic_comment"/>
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/ic_comment_bubble_outline_black_24dp"/>
 
             <ImageButton
+                android:id="@+id/btn_share"
                 android:layout_alignParentEnd="true"
-                android:layout_width="30dp"
-                android:layout_height="31dp"
-                android:background="@drawable/ic_upload"/>
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/ic_upload"/>
         </RelativeLayout>
     </LinearLayout>
 

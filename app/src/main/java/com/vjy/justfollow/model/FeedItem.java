@@ -7,7 +7,9 @@ package com.vjy.justfollow.model;
 public class FeedItem {
 
     private int id;
+    private int likeCount;
     private String name, status, image, profilePic, timeStamp, url;
+    private boolean isLiked;
 
     public FeedItem() {
     }
@@ -22,6 +24,9 @@ public class FeedItem {
         this.profilePic = profilePic;
         this.timeStamp = timeStamp;
         this.url = url;
+
+        this.likeCount = 0;
+        this.isLiked = false;
     }
 
 
@@ -79,5 +84,21 @@ public class FeedItem {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
     }
 }

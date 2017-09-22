@@ -8,6 +8,7 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -15,22 +16,36 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.vjy.justfollow.R;
 import com.vjy.justfollow.app.AppController;
 import com.vjy.justfollow.custom_view.CircularNetworkImageView;
-import com.vjy.justfollow.custom_view.FeedImageView;
+import com.vjy.justfollow.likebutton.LikeButton;
+import com.vjy.justfollow.likebutton.OnLikeListener;
 import com.vjy.justfollow.model.FeedItem;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by Vijay Kumar on 13-09-2017.
  */
 
-public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapter.ViewHolder> {
+public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapter.ViewHolder> implements OnLikeListener{
+
+    public static final String ACTION_LIKE_BUTTON_CLICKED = "action_like_button_button";
+    public static final String ACTION_LIKE_IMAGE_CLICKED = "action_like_image_button";
+
+    public static final int VIEW_TYPE_DEFAULT = 1;
+    public static final int VIEW_TYPE_LOADER = 2;
+
+
 
 
     private List<FeedItem> feedItems;
 
 
     private ImageLoader imageLoader;
+
+    private OnFeedItemClickListener onFeedItemClickListener;
 
     public FeedRecyclerAdapter(List<FeedItem> feedItems) {
         this.feedItems = feedItems;
@@ -40,7 +55,10 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
     @Override
     public FeedRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_item, parent,false);
-        return new ViewHolder(itemView);
+
+        ViewHolder viewHolder = new ViewHolder(itemView);
+        setupClickableViews(itemView, viewHolder);
+        return viewHolder;
     }
 
 
@@ -106,6 +124,50 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
         } else {
             holder.feedImageView.setVisibility(View.GONE);
         }
+
+
+        ((ViewHolder)holder).bindView(item);
+
+    }
+
+
+
+
+
+    public void setOnFeedItemClickListener(OnFeedItemClickListener onFeedItemClickListener) {
+        this.onFeedItemClickListener = onFeedItemClickListener;
+    }
+
+
+
+
+
+    private void setupClickableViews (final View view, final ViewHolder holder) {
+
+        holder.btnLike.setOnLikeListener(this, holder);
+
+        /*holder.btnLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int adapterPosition = holder.getAdapterPosition();
+//                feedItems.get(adapterPosition).
+                holder.getFeedItem().setLikeCount(feedItems.get(adapterPosition).getLikeCount()+1);
+                holder.getFeedItem().setLiked(!holder.getFeedItem().isLiked());
+
+                notifyItemChanged(adapterPosition, ACTION_LIKE_IMAGE_CLICKED);
+            }
+        });*/
+
+
+        holder.feedImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int adapterPosition = holder.getAdapterPosition();
+                feedItems.get(adapterPosition).setLikeCount(feedItems.get(adapterPosition).getLikeCount()+1);
+                notifyItemChanged(adapterPosition, ACTION_LIKE_IMAGE_CLICKED);
+            }
+        });
+
     }
 
     /**
@@ -118,33 +180,74 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
         return feedItems.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView name ;
-        TextView timestamp ;
-        TextView statusMsg;
-        TextView url;
-        CircularNetworkImageView profilePic;
-        NetworkImageView feedImageView;
+    @Override
+    public void liked(LikeButton likeButton, FeedRecyclerAdapter.ViewHolder holder) {
+        int adapterPosition = holder.getAdapterPosition();
+        holder.getFeedItem().setLikeCount(feedItems.get(adapterPosition).getLikeCount()+1);
+
+        notifyItemChanged(adapterPosition, ACTION_LIKE_IMAGE_CLICKED);
+    }
+
+    @Override
+    public void unLiked(LikeButton likeButton, FeedRecyclerAdapter.ViewHolder holder) {
+        int adapterPosition = holder.getAdapterPosition();
+        holder.getFeedItem().setLikeCount(feedItems.get(adapterPosition).getLikeCount()-1);
+
+        notifyItemChanged(adapterPosition, ACTION_LIKE_IMAGE_CLICKED);
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder{
+
+        @BindView(R.id.name) TextView name ;
+        @BindView(R.id.timestamp)TextView timestamp ;
+        @BindView(R.id.txtStatusMsg)TextView statusMsg;
+        @BindView(R.id.txtUrl) TextView url;
+        @BindView(R.id.profilePic) CircularNetworkImageView profilePic;
+        @BindView(R.id.feedImage1) NetworkImageView feedImageView;
+
+        @BindView(R.id.btn_like)
+        LikeButton btnLike;
+
+        @BindView(R.id.btn_comment)
+        ImageView btnComment;
+
+        @BindView(R.id.btn_share)
+        ImageView btnShare;
+
+
+
+        FeedItem feedItem;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            name = (TextView) itemView.findViewById(R.id.name);
-            timestamp = (TextView) itemView
-                    .findViewById(R.id.timestamp);
+            ButterKnife.bind(this, itemView);
+        }
 
-            statusMsg = (TextView) itemView
-                    .findViewById(R.id.txtStatusMsg);
+        public void bindView(FeedItem feedItem) {
+            this.feedItem = feedItem;
+            int adapterPosition = getAdapterPosition();
+            /*btnLike.setLiked(true);*/
+        }
 
-            url = (TextView) itemView.findViewById(R.id.txtUrl);
 
-            profilePic =  itemView
-                    .findViewById(R.id.profilePic);
 
-            feedImageView = (NetworkImageView) itemView
-                    .findViewById(R.id.feedImage1);
+        public FeedItem getFeedItem() {
+            return feedItem;
         }
     }
+
+
+
+
+    public interface OnFeedItemClickListener {
+        void onCommentsClick(View v, int position);
+
+        void onMoreClick(View v, int position);
+
+        void onProfileClick(View v);
+    }
+
 }

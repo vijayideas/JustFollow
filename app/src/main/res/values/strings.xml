@@ -14,4 +14,11 @@
     <string name="title_nearby">Nearby</string>
 
 
+
+    <string name="facebook_app_id">1543064102419156</string>
+    <string name="fb_login_protocol_scheme">fb1543064102419156</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">6b513efec80048f58c8799ea69bd8025</string>
+
+
+
 </resources>

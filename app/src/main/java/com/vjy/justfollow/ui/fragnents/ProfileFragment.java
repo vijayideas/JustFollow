@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.FacebookSdk;
 import com.vjy.justfollow.R;
 import com.vjy.justfollow.app.AppController;
 import com.vjy.justfollow.custom_view.CircularNetworkImageView;
@@ -34,7 +35,7 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         // Inflate the layout for this fragment
-        CircularNetworkImageView imageView = view.findViewById(R.id.profilePic);
+        CircularNetworkImageView imageView = (CircularNetworkImageView) view.findViewById(R.id.profilePic);
 
         imageView.setImageUrl(p, AppController.getInstance().getImageLoader());
         return view;
