@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -66,6 +68,8 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
     public void onBindViewHolder(FeedRecyclerAdapter.ViewHolder holder, int position) {
         FeedItem item = feedItems.get(position);
 
+        holder.bindView(item);
+
         holder.name.setText(item.getName());
 
         // Converting timestamp into x ago format
@@ -102,10 +106,10 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
         String p = "https://s3-us-west-1.amazonaws.com/com.localapp.profile.image/5908362ac44dc510a4cfe1bc1502333400497";
         String u = "https://bgcdn.s3.amazonaws.com/wp-content/uploads/2013/04/5-2-God-is-in-Nature-1024x681.jpg";
 
-        item.setImage(u);//todo fgdggdsg
+//        item.setImage(u);//todo fgdggdsg
 
         // user profile pic
-        holder.profilePic.setImageUrl(p, imageLoader);
+        holder.profilePic.setImageUrl(item.getProfilePic(), imageLoader);
 
         // Feed image
         if (item.getImage() != null) {
@@ -126,7 +130,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
         }
 
 
-        ((ViewHolder)holder).bindView(item);
+
 
     }
 
@@ -168,6 +172,13 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
             }
         });
 
+        holder.btnShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onFeedItemClickListener.onMoreClick(v, holder.getAdapterPosition());
+            }
+        });
+
     }
 
     /**
@@ -184,15 +195,17 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
     @Override
     public void liked(LikeButton likeButton, FeedRecyclerAdapter.ViewHolder holder) {
         int adapterPosition = holder.getAdapterPosition();
-        holder.getFeedItem().setLikeCount(feedItems.get(adapterPosition).getLikeCount()+1);
-
+        feedItems.get(adapterPosition).likeCount++;
+//        holder.getFeedItem().setLikeCount(feedItems.get(adapterPosition).getLikeCount()+1);
         notifyItemChanged(adapterPosition, ACTION_LIKE_IMAGE_CLICKED);
     }
 
     @Override
     public void unLiked(LikeButton likeButton, FeedRecyclerAdapter.ViewHolder holder) {
         int adapterPosition = holder.getAdapterPosition();
-        holder.getFeedItem().setLikeCount(feedItems.get(adapterPosition).getLikeCount()-1);
+
+        feedItems.get(adapterPosition).likeCount--;
+//        holder.getFeedItem().setLikeCount(feedItems.get(adapterPosition).getLikeCount()-1);
 
         notifyItemChanged(adapterPosition, ACTION_LIKE_IMAGE_CLICKED);
     }
@@ -212,8 +225,11 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
         @BindView(R.id.btn_comment)
         ImageView btnComment;
 
-        @BindView(R.id.btn_share)
+        @BindView(R.id.btn_more)
         ImageView btnShare;
+
+        @BindView(R.id.tsLikesCounter)
+        TextSwitcher tsLikesCounter;
 
 
 
@@ -226,9 +242,15 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindView(FeedItem feedItem) {
+        public void bindView(final FeedItem feedItem) {
             this.feedItem = feedItem;
-            int adapterPosition = getAdapterPosition();
+            final int adapterPosition = getAdapterPosition();
+//            tsLikesCounter.setText(feedItem.likeCount+ "likes");
+            tsLikesCounter.setText(profilePic.getResources().getQuantityString(
+                    R.plurals.likes_count, feedItem.likeCount, feedItem.likeCount
+            ));
+
+
             /*btnLike.setLiked(true);*/
         }
 

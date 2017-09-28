@@ -15,6 +15,7 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/editProfileLayout"
                 android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:layout_width="match_parent"
@@ -24,8 +25,8 @@
 
                 <com.vjy.justfollow.custom_view.CircularNetworkImageView
                     android:id="@+id/profilePic"
-                    android:layout_width="@dimen/feed_item_profile_pic"
-                    android:layout_height="@dimen/feed_item_profile_pic"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
                     android:scaleType="fitCenter"
                     android:src="@mipmap/ic_launcher">
                 </com.vjy.justfollow.custom_view.CircularNetworkImageView>
@@ -40,7 +41,6 @@
                         android:id="@+id/name"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:text="Vijay Kumar"
                         android:textColor="#232323"
                         android:textSize="@dimen/feed_item_profile_name"
                         android:textStyle="bold" />
@@ -357,9 +357,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/logout_layout"
                 android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:padding="8dp"
+                android:layout_marginBottom="25dp"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

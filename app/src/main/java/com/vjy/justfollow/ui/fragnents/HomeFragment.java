@@ -18,8 +18,15 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.vjy.justfollow.R;
 import com.vjy.justfollow.adapter.FeedRecyclerAdapter;
 import com.vjy.justfollow.app.AppController;
+import com.vjy.justfollow.app.AppPrefs;
 import com.vjy.justfollow.custom_view.CircularNetworkImageView;
+import com.vjy.justfollow.custom_view.FeedContextMenu;
+import com.vjy.justfollow.custom_view.FeedContextMenuManager;
 import com.vjy.justfollow.model.FeedItem;
+import com.vjy.justfollow.model.User;
+import com.vjy.justfollow.model.UserCredential;
+import com.vjy.justfollow.network.helper.CommonRequest;
+import com.vjy.justfollow.network.request.GetMyProfileRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,7 +40,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeedItemClickListener{
+public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeedItemClickListener,
+        GetMyProfileRequest.GetMyProfileResponseCallback, FeedContextMenu.OnFeedContextMenuItemClickListener{
 
     private static final String TAG = HomeFragment.class.getSimpleName();
 
@@ -46,8 +54,8 @@ public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeed
 
     private FeedRecyclerAdapter listAdapter;
     private List<FeedItem> feedItems;
-    private String URL_FEED = "https://api.androidhive.info/feed/feed.json";
-    String p = "https://s3-us-west-1.amazonaws.com/com.localapp.profile.image/5908362ac44dc510a4cfe1bc1502333400497";
+//    private String URL_FEED = "https://api.androidhive.info/feed/feed.json";
+    private String URL_FEED = CommonRequest.DOMAIN + "/api/post/allPost";
 
 
     public HomeFragment() {
@@ -71,6 +79,8 @@ public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeed
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
+
+        myProfileRequest();
         initUi();
         // Inflate the layout for this fragment
         return view;
@@ -79,7 +89,6 @@ public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeed
 
     void initUi() {
 
-        profilePic.setImageUrl(p, AppController.getInstance().getImageLoader());
 
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
         listView.setItemAnimator(new DefaultItemAnimator());
@@ -98,7 +107,7 @@ public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeed
         // We first check for cached request
         Cache cache = AppController.getInstance().getRequestQueue().getCache();
         Cache.Entry entry = cache.get(URL_FEED);
-        if (entry != null) {
+        if (entry != null ) {
             // fetch the data from cache
             try {
                 String data = new String(entry.data, "UTF-8");
@@ -111,7 +120,9 @@ public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeed
                 e.printStackTrace();
             }
 
-        } else {
+        }
+
+
             // making fresh volley request and getting json
             JsonObjectRequest jsonReq = new JsonObjectRequest(Request.Method.GET,
                     URL_FEED, null, new Response.Listener<JSONObject>() {
@@ -133,7 +144,7 @@ public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeed
 
             // Adding request to volley request queue
             AppController.getInstance().addToRequestQueue(jsonReq);
-        }
+
     }
 
 
@@ -141,7 +152,7 @@ public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeed
      * Parsing json reponse and passing the data to feed view list adapter
      * */
     private void parseJsonFeed(JSONObject response) {
-        try {
+        /*try {
             JSONArray feedArray = response.getJSONArray("feed");
 
             for (int i = 0; i < feedArray.length(); i++) {
@@ -171,9 +182,52 @@ public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeed
             listAdapter.notifyDataSetChanged();
         } catch (JSONException e) {
             e.printStackTrace();
+        }*/
+
+        try {
+            JSONArray feedArray = response.getJSONArray("data");
+            feedItems.clear();
+            for (int i = 0; i < feedArray.length(); i++) {
+                JSONObject feedObj = (JSONObject) feedArray.get(i);
+
+                FeedItem item = new FeedItem();
+                item.setId(feedObj.getString("id"));
+                item.setName(feedObj.getString("userName"));
+
+                // Image might be null sometimes
+                String image = feedObj.isNull("mediaFile") ? null : feedObj
+                        .getString("mediaFile");
+                item.setImage(image);
+                item.setStatus(feedObj.getString("text"));
+                item.setProfilePic(feedObj.getString("profilePic"));
+                item.setTimeStamp(feedObj.getString("createdDate"));
+
+                // url might be null sometimes
+                String feedUrl = feedObj.isNull("url") ? null : feedObj
+                        .getString("url");
+                item.setUrl(feedUrl);
+
+                feedItems.add(item);
+            }
+
+            // notify data changes to list adapater
+            listAdapter.notifyDataSetChanged();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
+
+
+    private void myProfileRequest() {
+        UserCredential credential = AppPrefs.getInstance().getUserDetails();
+        GetMyProfileRequest request = new GetMyProfileRequest(credential, this);
+        request.executeRequest();
+    }
+
+    private void setProfileData(User user) {
+        profilePic.setImageUrl(user.getPicUrl(), AppController.getInstance().getImageLoader());
+    }
 
     @Override
     public void onCommentsClick(View v, int position) {
@@ -182,11 +236,42 @@ public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeed
 
     @Override
     public void onMoreClick(View v, int position) {
-
+        FeedContextMenuManager.getInstance().toggleContextMenuFromView(v, position, this);
     }
 
     @Override
     public void onProfileClick(View v) {
 
+    }
+
+    @Override
+    public void GetMyProfileResponse(CommonRequest.ResponseCode responseCode, User user) {
+        if (responseCode == CommonRequest.ResponseCode.COMMON_RES_SUCCESS) {
+            setProfileData(user);
+        }else {
+            if (user != null) {
+                setProfileData(user);
+            }
+        }
+    }
+
+    @Override
+    public void onReportClick(int feedItem) {
+        FeedContextMenuManager.getInstance().hideContextMenu();
+    }
+
+    @Override
+    public void onSharePhotoClick(int feedItem) {
+        FeedContextMenuManager.getInstance().hideContextMenu();
+    }
+
+    @Override
+    public void onCopyShareUrlClick(int feedItem) {
+        FeedContextMenuManager.getInstance().hideContextMenu();
+    }
+
+    @Override
+    public void onCancelClick(int feedItem) {
+        FeedContextMenuManager.getInstance().hideContextMenu();
     }
 }

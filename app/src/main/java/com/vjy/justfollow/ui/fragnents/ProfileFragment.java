@@ -6,27 +6,44 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.vjy.justfollow.R;
 import com.vjy.justfollow.app.AppController;
+import com.vjy.justfollow.app.AppPrefs;
 import com.vjy.justfollow.custom_view.CircularNetworkImageView;
+import com.vjy.justfollow.model.User;
+import com.vjy.justfollow.model.UserCredential;
+import com.vjy.justfollow.network.helper.CommonRequest;
+import com.vjy.justfollow.network.request.GetMyProfileRequest;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements GetMyProfileRequest.GetMyProfileResponseCallback{
 
-    String p = "https://s3-us-west-1.amazonaws.com/com.localapp.profile.image/5908362ac44dc510a4cfe1bc1502333400497";
+
+    @BindView(R.id.profilePic)
+    CircularNetworkImageView profileImg;
+
+    @BindView(R.id.name)
+    TextView nameTv;
+
+
 
     public ProfileFragment() {
         // Required empty public constructor
     }
 
     public static ProfileFragment newInstance() {
-        ProfileFragment fragment = new ProfileFragment();
 
-        return fragment;
+        return new ProfileFragment();
     }
 
 
@@ -34,11 +51,50 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        // Inflate the layout for this fragment
-        CircularNetworkImageView imageView = (CircularNetworkImageView) view.findViewById(R.id.profilePic);
+        ButterKnife.bind(this, view);
 
-        imageView.setImageUrl(p, AppController.getInstance().getImageLoader());
+        myProfileRequest();
+
+        // Inflate the layout for this fragment
         return view;
     }
+
+
+    @OnClick(R.id.editProfileLayout)
+    public void editProfile() {
+        Toast.makeText(this.getActivity(), "edit Profile", Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.logout_layout)
+    public void logOut() {
+        LoginManager.getInstance().logOut();
+        AppPrefs.getInstance().logOutUser(getActivity());
+
+        /*startActivity(new Intent(getContext(), LoginActivity.class));
+        getActivity().finish();*/
+    }
+
+    private void myProfileRequest() {
+        UserCredential credential = AppPrefs.getInstance().getUserDetails();
+        GetMyProfileRequest request = new GetMyProfileRequest(credential, this);
+        request.executeRequest();
+    }
+
+    private void setProfileData(User user) {
+        nameTv.setText(user.getName());
+        profileImg.setImageUrl(user.getPicUrl(), AppController.getInstance().getImageLoader());
+    }
+
+    @Override
+    public void GetMyProfileResponse(CommonRequest.ResponseCode responseCode, User user) {
+        if (responseCode == CommonRequest.ResponseCode.COMMON_RES_SUCCESS) {
+            setProfileData(user);
+        }else {
+            if (user != null) {
+                setProfileData(user);
+            }
+        }
+    }
+
 
 }

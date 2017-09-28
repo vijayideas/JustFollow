@@ -13,21 +13,32 @@ public class FbSignUpData {
     private String fbId;
     private String email;
     private String gender;
+    private String mobileNumber;
     private String birthDay;
     private File imgFile;
+    private String userId;
 
 
     public FbSignUpData() {
     }
 
-    public FbSignUpData(String name, String fbId, String email, String gender, File imgFile) {
+    public FbSignUpData(String name, String fbId, String email, String gender, String mobileNumber, File imgFile) {
         this.name = name;
         this.fbId = fbId;
         this.email = email;
         this.gender = gender;
+        this.mobileNumber = mobileNumber;
         this.imgFile = imgFile;
     }
 
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
 
     public String getBirthDay() {
         return birthDay;
@@ -75,5 +86,9 @@ public class FbSignUpData {
 
     public void setImgFile(File imgFile) {
         this.imgFile = imgFile;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

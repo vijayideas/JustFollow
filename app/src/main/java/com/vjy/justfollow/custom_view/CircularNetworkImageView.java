@@ -133,7 +133,9 @@ public class CircularNetworkImageView extends ShaderImageView {
         // The pre-existing content of this view didn't match the current URL.
         // Load the new image
         // from the network.
-        ImageLoader.ImageContainer newContainer = mImageLoader.get(mUrl,
+
+        // update the ImageContainer to be the new bitmap container.
+        mImageContainer = mImageLoader.get(mUrl,
                 new ImageLoader.ImageListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -184,9 +186,6 @@ public class CircularNetworkImageView extends ShaderImageView {
                         }*/
                     }
                 });
-
-        // update the ImageContainer to be the new bitmap container.
-        mImageContainer = newContainer;
 
     }
 

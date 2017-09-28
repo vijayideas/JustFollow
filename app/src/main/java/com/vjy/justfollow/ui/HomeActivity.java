@@ -16,7 +16,7 @@ import com.vjy.justfollow.ui.fragnents.HomeFragment;
 import com.vjy.justfollow.ui.fragnents.NearbyFragment;
 import com.vjy.justfollow.ui.fragnents.ProfileFragment;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity{
 
     private static final String HOME_FRAGMENT = "home_fragment";
     private static final String NEARBY_FRAGMENT = "nearby_fragment";

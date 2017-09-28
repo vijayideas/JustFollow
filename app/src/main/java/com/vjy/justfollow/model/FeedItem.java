@@ -6,15 +6,15 @@ package com.vjy.justfollow.model;
 
 public class FeedItem {
 
-    private int id;
-    private int likeCount;
+    private String id;
+    public int likeCount;
     private String name, status, image, profilePic, timeStamp, url;
     private boolean isLiked;
 
     public FeedItem() {
     }
 
-    public FeedItem(int id, String name, String status, String image, String profilePic, String timeStamp, String url) {
+    public FeedItem(String id, String name, String status, String image, String profilePic, String timeStamp, String url) {
         super();
 
         this.id = id;
@@ -30,11 +30,11 @@ public class FeedItem {
     }
 
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
