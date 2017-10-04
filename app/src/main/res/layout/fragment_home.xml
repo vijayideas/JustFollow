@@ -1,12 +1,14 @@
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
+    android:background="@color/feed_bg"
 android:orientation="vertical">
 
     <LinearLayout
         android:descendantFocusability="blocksDescendants"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <LinearLayout
@@ -23,20 +25,22 @@ android:orientation="vertical">
                 android:id="@+id/profilePic"
                 android:layout_width="@dimen/feed_item_profile_pic"
                 android:layout_height="@dimen/feed_item_profile_pic"
-                android:scaleType="fitCenter" >
+                android:scaleType="fitCenter"
+                android:background="@drawable/bg_comment_avatar">
             </com.vjy.justfollow.custom_view.CircularNetworkImageView>
 
             <TextView
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:id="@+id/timestamp"
+                android:id="@+id/create_post"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:textColor="@color/timestamp"
-                android:text="Whats on your mind?"
+                android:text="What's on your mind?"
                 android:textSize="14sp" />
 
             <ImageButton
+                android:id="@+id/down_arrow"
                 android:paddingTop="8dp"
                 android:layout_width="32dp"
                 android:layout_height="wrap_content"

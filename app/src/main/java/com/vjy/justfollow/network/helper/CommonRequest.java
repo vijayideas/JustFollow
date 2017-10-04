@@ -26,6 +26,9 @@ public abstract class CommonRequest {
     private static final String LOGIN_REQUEST_URL = DOMAIN + "/login";
     private static final String FB_LOGIN_REQUEST_URL = DOMAIN + "/api/user/loginWithFacebook";
     private static final String GET_MY_PROFILE_REQUEST_URL = DOMAIN + "/api/user/me?";
+    private static final String POST_LIKE_REQUEST_URL = DOMAIN + "/api/post/like";
+    private static final String POST_DISLIKE_REQUEST_URL = DOMAIN + "/api/post/disLike";
+    private static final String POST_CREATE_REQUEST_URL = DOMAIN + "/api/user/post/create";
 
 
 
@@ -34,6 +37,9 @@ public abstract class CommonRequest {
         COMMON_REQUEST_LOGIN,
         COMMON_REQUEST_FB_LOGIN,
         COMMON_REQUEST_MY_PROFILE,
+        COMMON_REQUEST_LIKE_POST,
+        COMMON_REQUEST_DISLIKE_POST,
+        COMMON_REQUEST_POST_CREATE,
 
         COMMON_REQUEST_END
     }
@@ -137,6 +143,9 @@ public abstract class CommonRequest {
             case COMMON_REQUEST_LOGIN: return LOGIN_REQUEST_URL;
             case COMMON_REQUEST_FB_LOGIN: return FB_LOGIN_REQUEST_URL;
             case COMMON_REQUEST_MY_PROFILE: return GET_MY_PROFILE_REQUEST_URL;
+            case COMMON_REQUEST_LIKE_POST: return POST_LIKE_REQUEST_URL;
+            case COMMON_REQUEST_DISLIKE_POST: return POST_DISLIKE_REQUEST_URL;
+            case COMMON_REQUEST_POST_CREATE: return POST_CREATE_REQUEST_URL;
 
             default: return null;
         }

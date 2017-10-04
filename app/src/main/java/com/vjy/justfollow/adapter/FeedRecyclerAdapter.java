@@ -21,6 +21,7 @@ import com.vjy.justfollow.custom_view.CircularNetworkImageView;
 import com.vjy.justfollow.likebutton.LikeButton;
 import com.vjy.justfollow.likebutton.OnLikeListener;
 import com.vjy.justfollow.model.FeedItem;
+import com.vjy.justfollow.network.request.PostLikeDislikeRequest;
 
 import java.util.List;
 
@@ -166,9 +167,9 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
         holder.feedImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int adapterPosition = holder.getAdapterPosition();
+                /*int adapterPosition = holder.getAdapterPosition();
                 feedItems.get(adapterPosition).setLikeCount(feedItems.get(adapterPosition).getLikeCount()+1);
-                notifyItemChanged(adapterPosition, ACTION_LIKE_IMAGE_CLICKED);
+                notifyItemChanged(adapterPosition, ACTION_LIKE_IMAGE_CLICKED);*/
             }
         });
 
@@ -176,6 +177,13 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
             @Override
             public void onClick(View v) {
                 onFeedItemClickListener.onMoreClick(v, holder.getAdapterPosition());
+            }
+        });
+
+        holder.btnComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onFeedItemClickListener.onCommentsClick(v, holder.getAdapterPosition());
             }
         });
 
@@ -195,7 +203,11 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
     @Override
     public void liked(LikeButton likeButton, FeedRecyclerAdapter.ViewHolder holder) {
         int adapterPosition = holder.getAdapterPosition();
-        feedItems.get(adapterPosition).likeCount++;
+
+        FeedItem feedItem = feedItems.get(adapterPosition);
+        feedItem.likeCount++;
+        feedItem.setLiked(true);
+        likeDislikeRequest(feedItem.getId(), true);
 //        holder.getFeedItem().setLikeCount(feedItems.get(adapterPosition).getLikeCount()+1);
         notifyItemChanged(adapterPosition, ACTION_LIKE_IMAGE_CLICKED);
     }
@@ -204,8 +216,10 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
     public void unLiked(LikeButton likeButton, FeedRecyclerAdapter.ViewHolder holder) {
         int adapterPosition = holder.getAdapterPosition();
 
-        feedItems.get(adapterPosition).likeCount--;
-//        holder.getFeedItem().setLikeCount(feedItems.get(adapterPosition).getLikeCount()-1);
+        FeedItem feedItem = feedItems.get(adapterPosition);
+        feedItem.likeCount--;
+        feedItem.setLiked(false);
+        likeDislikeRequest(feedItem.getId(), false);
 
         notifyItemChanged(adapterPosition, ACTION_LIKE_IMAGE_CLICKED);
     }
@@ -251,7 +265,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
             ));
 
 
-            /*btnLike.setLiked(true);*/
+            btnLike.setLiked(feedItem.isLiked());
         }
 
 
@@ -261,6 +275,11 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
         }
     }
 
+
+    private void likeDislikeRequest(String itemId, boolean like) {
+        PostLikeDislikeRequest likeDislikeRequest = new PostLikeDislikeRequest(itemId, like);
+        likeDislikeRequest.executeRequest();
+    }
 
 
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">JUSTFOLLOW</string>
+    <string name="app_name">JustFollow</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -14,6 +14,15 @@
     <string name="title_nearby">Nearby</string>
 
 
+    <string-array name="privacy_array">
+        <item>Public</item>
+        <item>Followers</item>
+        <item>Private</item>
+
+    </string-array>
+
+
+
     <string name="facebook_app_id">1543064102419156</string>
     <string name="fb_login_protocol_scheme">fb1543064102419156</string>
     <!--<string name="ACCOUNT_KIT_CLIENT_TOKEN">6b513efec80048f58c8799ea69bd8025</string>-->
@@ -22,5 +31,6 @@
         <item quantity="one">%d like</item>
         <item quantity="other">%d likes</item>
     </plurals>
+    <string name="title_activity_comments">Comments</string>
 
 </resources>

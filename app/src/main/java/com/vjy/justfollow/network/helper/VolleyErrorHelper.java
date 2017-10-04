@@ -44,6 +44,7 @@ public class VolleyErrorHelper {
                 case 404:
                 case 422:
                 case 401:
+                case 500:
                     String trimmedString;
                     try {
                         String json;

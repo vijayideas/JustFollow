@@ -1,5 +1,6 @@
 package com.vjy.justfollow.ui.fragnents;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -27,6 +28,8 @@ import com.vjy.justfollow.model.User;
 import com.vjy.justfollow.model.UserCredential;
 import com.vjy.justfollow.network.helper.CommonRequest;
 import com.vjy.justfollow.network.request.GetMyProfileRequest;
+import com.vjy.justfollow.ui.CommentsActivity;
+import com.vjy.justfollow.ui.CreatePostActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +41,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeedItemClickListener,
@@ -55,7 +59,7 @@ public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeed
     private FeedRecyclerAdapter listAdapter;
     private List<FeedItem> feedItems;
 //    private String URL_FEED = "https://api.androidhive.info/feed/feed.json";
-    private String URL_FEED = CommonRequest.DOMAIN + "/api/post/allPost";
+    private String URL_FEED = CommonRequest.DOMAIN + "/api/post/allPost?userId=" + AppPrefs.getInstance().getUserDetails().getUserId();
 
 
     public HomeFragment() {
@@ -87,8 +91,13 @@ public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeed
     }
 
 
-    void initUi() {
+    @OnClick({R.id.create_post, R.id.down_arrow})
+    public void createPost() {
+        startActivityForResult(new Intent(this.getContext(), CreatePostActivity.class),100);
+    }
 
+
+    void initUi() {
 
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
         listView.setItemAnimator(new DefaultItemAnimator());
@@ -123,28 +132,34 @@ public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeed
         }
 
 
-            // making fresh volley request and getting json
-            JsonObjectRequest jsonReq = new JsonObjectRequest(Request.Method.GET,
-                    URL_FEED, null, new Response.Listener<JSONObject>() {
+        feedRequest();
 
-                @Override
-                public void onResponse(JSONObject response) {
-                    VolleyLog.d(TAG, "Response: " + response.toString());
-                    if (response != null) {
-                        parseJsonFeed(response);
-                    }
+
+    }
+
+
+    private void feedRequest() {
+        // making fresh volley request and getting json
+        JsonObjectRequest jsonReq = new JsonObjectRequest(Request.Method.GET,
+                URL_FEED, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                VolleyLog.d(TAG, "Response: " + response.toString());
+                if (response != null) {
+                    parseJsonFeed(response);
                 }
-            }, new Response.ErrorListener() {
+            }
+        }, new Response.ErrorListener() {
 
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    VolleyLog.d(TAG, "Error: " + error.getMessage());
-                }
-            });
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+            }
+        });
 
-            // Adding request to volley request queue
-            AppController.getInstance().addToRequestQueue(jsonReq);
-
+        // Adding request to volley request queue
+        AppController.getInstance().addToRequestQueue(jsonReq);
     }
 
 
@@ -207,6 +222,12 @@ public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeed
                         .getString("url");
                 item.setUrl(feedUrl);
 
+                item.setLiked(feedObj.getBoolean("liked"));
+                item.setLikeCount(feedObj.getInt("likes"));
+
+
+
+
                 feedItems.add(item);
             }
 
@@ -231,7 +252,8 @@ public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeed
 
     @Override
     public void onCommentsClick(View v, int position) {
-
+        final Intent intent = new Intent(v.getContext(), CommentsActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -273,5 +295,14 @@ public class HomeFragment extends Fragment implements FeedRecyclerAdapter.OnFeed
     @Override
     public void onCancelClick(int feedItem) {
         FeedContextMenuManager.getInstance().hideContextMenu();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == 200) {
+            feedRequest();
+        }
     }
 }

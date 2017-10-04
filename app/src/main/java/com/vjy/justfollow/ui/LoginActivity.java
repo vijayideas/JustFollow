@@ -235,7 +235,7 @@ public class LoginActivity extends AppCompatActivity implements GraphRequest.Gra
         if (responseCode == CommonRequest.ResponseCode.COMMON_RES_SUCCESS) {
 
             AccessToken accessToken = loginData.getFbLoginResult().getAccessToken();
-            AppPrefs.getInstance().createLoginSession(new UserCredential(accessToken.getUserId(), accessToken.getToken()));
+            AppPrefs.getInstance().createLoginSession(new UserCredential(accessToken.getUserId(), accessToken.getToken(), loginData.getUserId()));
             startActivity(new Intent(LoginActivity.this,HomeActivity.class));
             finish();
 

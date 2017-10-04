@@ -58,7 +58,7 @@ public class HomeActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
 
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
-        toolbarTitle.setText(R.string.app_name);
+        toolbarTitle.setText("JUSTFOLLOW");
 
         if (savedInstanceState != null) {
             //TODO: work on arg for landscape mood
@@ -96,7 +96,7 @@ public class HomeActivity extends AppCompatActivity{
                     ft.add(R.id.content, HomeFragment.newInstance(), HOME_FRAGMENT);
                 }
 
-                toolbarTitle.setText(R.string.app_name);
+                toolbarTitle.setText("JUSTFOLLOW");
             }
             break;
             case NEARBY_FRAGMENT:{
@@ -137,4 +137,9 @@ public class HomeActivity extends AppCompatActivity{
         ft.commit();
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }
