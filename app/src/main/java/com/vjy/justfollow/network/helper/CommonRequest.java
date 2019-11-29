@@ -20,11 +20,11 @@ import java.util.Map;
 
 public abstract class CommonRequest {
 
-    public static final String DOMAIN = "http://192.172.4.122:8080";//localhost
+    public static final String DOMAIN = "http://192.168.0.117:8080";//localhost
 
 
     private static final String LOGIN_REQUEST_URL = DOMAIN + "/login";
-    private static final String FB_LOGIN_REQUEST_URL = DOMAIN + "/api/user/loginWithFacebook";
+    private static final String FB_LOGIN_REQUEST_URL = "http://192.168.0.117:8080/api/user/loginWithFacebook";//DOMAIN + "/api/user/loginWithFacebook";
     private static final String GET_MY_PROFILE_REQUEST_URL = DOMAIN + "/api/user/me?";
     private static final String POST_LIKE_REQUEST_URL = DOMAIN + "/api/post/like";
     private static final String POST_DISLIKE_REQUEST_URL = DOMAIN + "/api/post/disLike";

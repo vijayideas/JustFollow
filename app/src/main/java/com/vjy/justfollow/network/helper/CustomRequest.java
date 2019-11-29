@@ -1,10 +1,12 @@
 package com.vjy.justfollow.network.helper;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.HttpHeaderParser;
 
 import org.json.JSONException;
@@ -61,6 +63,7 @@ public class CustomRequest extends Request<JSONObject> {
     public String getBodyContentType() {
         return "application/json";
     }
+
 
     @Override
     protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {

@@ -1,16 +1,24 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "26.0.1"
+    signingConfigs {
+        debug {
+            storeFile file('C:\\Users\\4 way\\.android\\debug.keystore')
+        }
+    }
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.vjy.justfollow"
         minSdkVersion 19
-        targetSdkVersion 25
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     buildTypes {
         release {
@@ -27,21 +35,23 @@ repositories {
 
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile project(':volley')
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.github.siyamed:android-shape-imageview:0.9.3@aar'
-    compile 'com.jakewharton:butterknife:8.8.1'
-    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
-    compile 'com.google.code.gson:gson:2.8.2'
-    compile 'com.github.esafirm.android-image-picker:imagepicker:1.8.0'
-    compile 'com.android.support:cardview-v7:25.3.1'
-    testCompile 'junit:junit:4.12'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    //implementation project(':volley')
+    implementation 'com.android.volley:volley:1.1.1'
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.github.siyamed:android-shape-imageview:0.9.3@aar'
+    implementation 'com.jakewharton:butterknife:10.2.0'
+    implementation 'com.facebook.android:facebook-android-sdk:5.11.2'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.github.esafirm.android-image-picker:imagepicker:1.8.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    testImplementation 'junit:junit:4.12'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
 }

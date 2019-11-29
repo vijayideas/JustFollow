@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -76,11 +76,11 @@ public class LoginActivity extends AppCompatActivity implements GraphRequest.Gra
         List<String> fbPermissions = new ArrayList<>();
         fbPermissions.add(Constants.FB_PERMISSION_PROFILE);
         fbPermissions.add(Constants.FB_PERMISSION_EMAIL);
-        fbPermissions.add(Constants.FB_PERMISSION_ABOUT);
+        //fbPermissions.add(Constants.FB_PERMISSION_ABOUT);
         fbPermissions.add(Constants.FB_PERMISSION_BIRTHDAY);
         fbPermissions.add(Constants.FB_PERMISSION_LOCATION);
-        fbPermissions.add(Constants.FB_PERMISSION_RELATIONSHIP);
-        fbPermissions.add(Constants.FB_PERMISSION_WORK_HISTORY);
+        //fbPermissions.add(Constants.FB_PERMISSION_RELATIONSHIP);
+        //fbPermissions.add(Constants.FB_PERMISSION_WORK_HISTORY);
 
         loginButton.setReadPermissions(fbPermissions);
 

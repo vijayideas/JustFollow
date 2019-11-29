@@ -1,6 +1,6 @@
 package com.vjy.justfollow.likebutton;
 
-import android.support.annotation.DrawableRes;
+import androidx.annotation.DrawableRes;
 
 /**
  * Created by Vijay Kumar on 22-09-2017.

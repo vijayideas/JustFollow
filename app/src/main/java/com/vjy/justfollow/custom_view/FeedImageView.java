@@ -13,7 +13,7 @@ import com.android.volley.toolbox.ImageLoader;
  * Created by Vijay Kumar on 13-09-2017.
  */
 
-public class FeedImageView extends android.support.v7.widget.AppCompatImageView {
+public class FeedImageView extends androidx.appcompat.widget.AppCompatImageView {
 
 
     public interface ResponseObserver {
